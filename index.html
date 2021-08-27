@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+
+    body {
+      background-color: #5CDB95;
+      height: 100%;
+      box-sizing: border-box;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    .color1 {color:#fff;background-color:#05386B}
+    .color2 {color:#fff;background-color:#379683}
+    .color3 {color:#fff;background-color:#5CDB95}
+    .color4 {color:#fff;background-color:#8EE4AF}
+    .color5 {color:#05386B;background-color:#EDF5E1}
+
+    
+
+    </style>
+  </head>
+
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/lib/w3-colors-2019.css">
+
+  <body>
+    <!-- top buttons -->
+    <div class ="w3-container w3-bar-item w3-center" style="min-height:15%; display: flex;">
+      <button onclick="openPlayerMenu()" class="w3-button w3-border w3-border-white w3-third w3-hover-indigo" 
+      style = "color:#fff;background-color:#05386B" type="button">Player Menu</button>
+      <button onclick="openCheatSheet()" class="w3-button w3-border w3-border-white w3-third w3-hover-indigo" 
+      style = "color:#fff;background-color:#05386B" type="button">Cheat Sheet</button>
+      <button onclick="openShortcutsMenu()" class="w3-button w3-border w3-border-white w3-third w3-hover-indigo" 
+      style = "color:#fff;background-color:#05386B" type="button">Keyboard Shortcuts</button>
+      <button onclick="openNextHandMenu()" class="w3-button w3-border w3-border-white w3-third w3-hover-indigo"
+      style = "color:#fff;background-color:#05386B"  type="button">Next Hand</button>
+      <button onclick="cycle()" class="w3-button w3-border w3-border-white w3-third w3-hover-indigo"
+      style = "color:#fff;background-color:#05386B"  type="button">Next Player</button>
+    </div>
+
+    <div style = "min-height: 5%;"></div>
+
+    <div class = "w3-center" style = "min-height:45%; display:flex;" id="activePlayer">
+    </div>
+
+    <div style = "min-height: 5%;"></div>
+
+    <div style = "min-height:25%; display:flex">
+      <div class="w3-row-padding w3-center" style="min-height:100%; min-width:100%" id="nonActivePlayers">
+      </div>
+    </div>
+
+    <!-- raise popup -->
+    <div id="raisePopup" class="w3-modal">
+      <div class="w3-modal-content ">
+        <div class="w3-card-4 w3-display-container">
+          <header class="w3-container w3-yellow">
+            <h2>Raise Menu</h2>
+            <span onclick="document.getElementById('raisePopup').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+          </header>
+
+          <form class = "w3-container" onsubmit="closeRaiseMenu(); return false;">
+            <label>Raise To: </label>
+            <input id="raiseInput" class="w3-input w3-border w3-round w3-light-grey" type="number" autofocus required>
+
+            <p style="height:40px"></p>
+            <button id="closeRaiseMenuButton" class="w3-round w3-display-bottommiddle w3-margin-bottom w3-container w3-button w3-yellow">Raise</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- next hand popup -->
+    <div id="nextHandPopup" class="w3-modal">
+      <div class="w3-modal-content ">
+        <div class="w3-card-4 w3-display-container">
+          <header class="w3-container w3-green">
+            <h2>Next Hand Menu</h2>
+            <span onclick="document.getElementById('nextHandPopup').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+          </header>
+
+          <form class = "w3-container" onsubmit="closeNextHandMenu(); return false;">
+            <label>Winner: </label>
+            <select id="nextHandWinnerInput" class="w3-select w3-border w3-round w3-light-grey" autofocus required>
+              <option value="" disabled selected>Choose the winner</option>
+            </select>
+            
+            <p style="height:40px"></p>
+            <button id="closeNextHandPopup" class="w3-round w3-display-bottommiddle w3-margin-bottom w3-container w3-button w3-green">Next Hand</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- player menu popup -->
+    <div id="playerMenuPopup" class="w3-modal">
+      <div class="w3-modal-content ">
+        <div class="w3-card-4 w3-display-container">
+          <header class="w3-container w3-green">
+            <h2>Player Menu</h2>
+            <span onclick="document.getElementById('playerMenuPopup').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+          </header>
+
+          <form id="playerMenuForm" class = "w3-container" onsubmit="closePlayerMenu(); return false;">
+            <label>Number of Players: </label>
+            <input id="playerNumberInput" class="w3-input w3-border w3-round w3-light-grey" type="number" autofocus required>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- cheat sheet popup -->
+    <div id="cheatSheetPopup" class="w3-modal">
+      <div class="w3-modal-content ">
+        <div class="w3-card-4 w3-display-container">
+          <header class="w3-container w3-green">
+            <h2>Cheat Sheet</h2>
+            <span onclick="document.getElementById('cheatSheetPopup').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+          </header>
+          <p style="height:10px"></p>
+          <img src="http://www.pokerbonus.com/media/uploads/poker-cheat-sheets-hand-rankings.jpg" style="display: block; margin-left: auto; margin-right: auto; height: 700px; width: 530px" alt="Hand rankings">
+          <p style="height:10px"></p>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- keyboard shortcuts popup -->
+    <div id="shortcutsPopup" class="w3-modal">
+      <div class="w3-modal-content ">
+        <div class="w3-card-4 w3-display-container">
+          <header class="w3-container w3-green">
+            <h2>Keyboard Shortcuts</h2>
+            <span onclick="document.getElementById('shortcutsPopup').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+          </header>
+
+          <div class="w3-card-4 w3-display-container">
+            <p>C - Call</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>R - Raise</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>F - Fold</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>N - Next Round</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>H - Next Hand</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>P - Player Menu</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>X - Cheat Sheet</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>/ - Shortcuts Menu</p>
+          </div>
+          <div class="w3-card-4 w3-display-container">
+            <p>Esc - Close Current Menu</p>
+          </div>
+          <p style="height:10px"></p>
+        </div>
+      </div>
+    </div>
+
+  </body>
+
+  <script>
+    let totalPlayers;
+
+    totalPlayers = 4;
+    let round = 0;
+
+    let players = [];
+    let playersInOrder = [];
+
+    //player class
+    class Player {
+      constructor(name, startingBalance, id) {
+        this.name = name;
+        this.balance = startingBalance;
+        this.id = id;
+        this.infor = 0;
+        this.bet = 0;
+        this.folded = false;
+        this.visited = false;
+      }
+    }
+
+    //initialize each player
+    for(let i = 0; i<totalPlayers; i++) {
+      let newPlayer = new Player(`Player ${i+1}`, 500 /*TODO INSERT STARTING BALANCE*/, i);
+      players.push(newPlayer);
+      playersInOrder.push(newPlayer);
+    }
+
+    //draws non-active players at the bottom of the screen
+    function drawNonActivePlayers() {
+      for(let i = 1; i<totalPlayers; i++) {
+        let node = document.createElement("div");
+        node.className = "w3-col remove";
+        node.style.width = `${1/(totalPlayers-1)*100}%`;
+        node.style.minHeight = `100%`;
+        node.style.display = `flex`;
+
+        let cardNode = document.createElement('div');
+        cardNode.className = "w3-card-4 w3-container color2";
+        cardNode.style.display = `flex`;
+        cardNode.style.minHeight = `100%`;
+        cardNode.style.minWidth = `100%`;
+        cardNode.style.alignItems = `center`;
+        cardNode.style.justifyContent = `center`;
+        cardNode.style.fontSize = '20px';
+        cardNode.style.fontWeight = 'bold';
+
+        if(players[i].folded) cardNode.className = "w3-card-4 w3-container w3-2019-eclipse";
+
+        cardNode.appendChild(document.createTextNode(`${players[i].name}`));
+        cardNode.appendChild(document.createElement('br'));
+        cardNode.appendChild(document.createElement('br'));
+        cardNode.appendChild(document.createTextNode(`Balance Remaining: $${players[i].balance}`));
+        cardNode.appendChild(document.createElement('br'));
+        cardNode.appendChild(document.createTextNode(`In for: $${players[i].infor}`));
+        cardNode.appendChild(document.createElement('br'));
+        cardNode.appendChild(document.createTextNode(`Bet: $${players[i].bet}`));
+
+        node.appendChild(cardNode);
+        document.getElementById("nonActivePlayers").appendChild(node);
+      }
+    }
+
+    drawNonActivePlayers();
+
+    //draws active player in the middle of the screen AND actions
+    function drawActivePlayer() {
+      //contains player info
+      let playerNode = document.createElement("div");
+      playerNode.className = "w3-container remove";
+      playerNode.style.width = `75%`;
+      playerNode.style.display = `flex`;
+
+      //card with player info
+      let cardNode = document.createElement('div');
+      cardNode.className = "w3-card-4 w3-container color5";
+      cardNode.style.display = `flex`;
+      cardNode.style.minWidth = `100%`;
+      cardNode.style.alignItems = `center`;
+      cardNode.style.justifyContent = `center`;
+      cardNode.style.fontSize = '20px';
+      cardNode.style.fontWeight = 'bold';
+
+      cardNode.appendChild(document.createTextNode(`${players[0].name}`));
+      cardNode.appendChild(document.createElement('br'));
+      cardNode.appendChild(document.createElement('br'));
+      cardNode.appendChild(document.createTextNode(`Balance Remaining: $${players[0].balance}`));
+      cardNode.appendChild(document.createElement('br'));
+      cardNode.appendChild(document.createTextNode(`In for: $${players[0].infor}`));
+      cardNode.appendChild(document.createElement('br'));
+      cardNode.appendChild(document.createTextNode(`Bet: $${players[0].bet}`));
+
+      playerNode.appendChild(cardNode);
+      document.getElementById("activePlayer").appendChild(playerNode);
+
+      //contains buttons
+      let buttonBlock = document.createElement('div');
+      buttonBlock.className = "remove w3-bar-block w3-container"
+      buttonBlock.style.width = "25%";
+
+      //call button
+      let callButton = document.createElement('button');
+      callButton.className = "remove w3-bar-item w3-button w3-pale-green w3-border w3-hover-green";
+      callButton.style.minHeight = "33.3%";
+      callButton.style.display = "flex";
+      callButton.style.justifyContent = "center";
+      callButton.style.alignItems = "center";
+      callButton.innerHTML = "Check";
+      callButton.addEventListener("click", call);
+
+      //checks whether button should say Check or Call
+      let changeToCall = false;
+
+      for(let i = 1; i<players.length; i++) {
+        if(players[i].bet > 0) changeToCall = true;
+      }
+
+      if(changeToCall) callButton.innerHTML = "Call";
+
+      //bet button
+      let betButton = document.createElement('button');
+      betButton.className = "remove w3-bar-item w3-button w3-pale-yellow w3-border w3-hover-yellow";
+      betButton.style.minHeight = "33.3%";
+      betButton.style.display = "flex";
+      betButton.style.justifyContent = "center";
+      betButton.style.alignItems = "center";
+      betButton.innerHTML = "Raise";
+      betButton.addEventListener("click", openRaiseMenu);
+
+      //fold button
+      let foldButton = document.createElement('button');
+      foldButton.className = "remove w3-bar-item w3-button w3-pale-red w3-border w3-hover-red";
+      foldButton.style.minHeight = "33.3%";
+      foldButton.style.display = "flex";
+      foldButton.style.justifyContent = "center";
+      foldButton.style.alignItems = "center";
+      foldButton.innerHTML = "Fold";
+      foldButton.addEventListener("click", fold);
+
+      buttonBlock.appendChild(callButton);
+      buttonBlock.appendChild(betButton);
+      buttonBlock.appendChild(foldButton);
+
+      document.getElementById("activePlayer").appendChild(buttonBlock);
+    }
+
+    drawActivePlayer();
+
+    //cycle to next player (or next hand if all players have been visited)
+    function cycle() {
+
+      //cycle players[]
+      let first = players.shift();
+      players.push(first);
+
+      //visit first player
+      players[0].visited = true;
+
+      //check if all players are visited and if they all have the same bet
+      let allVisited = true;
+      let allSameBet = true;
+
+      let bet = -1;
+
+      for(let i = 0; i<totalPlayers; i++) {
+        if(!players[i].folded && !players[i].visited) {
+          allVisited = false;
+        }
+        if(!players[i].folded && allSameBet) {
+          let tempBet = players[i].bet;
+          if(bet==-1) bet = tempBet;
+          else if(tempBet!=bet) allSameBet = false;
+        }
+      }
+
+      //if all visited and all have same bet, move to next round
+      if(allVisited && allSameBet) nextRound();
+
+      clear();
+      drawActivePlayer();
+      drawNonActivePlayers();
+
+      //if the current player is folded, move on to the next player
+      if(players[0].folded) cycle();
+    }
+
+    //clears all elements with the class remove
+    function clear() {
+      let elements = document.getElementsByClassName("remove");
+
+      for(let i = elements.length-1; i>=0; i--) {
+        elements[i].remove();
+      }
+    }
+
+    //opens the popUpMenu for a raise
+    function openRaiseMenu() {
+      setOpenMenu(document.getElementById('raisePopup'));
+      let player = players[0];
+
+      //finds the max bet so far
+      let maxBet = 0;
+
+      for(let i = 0; i<players.length; i++) {
+        let tempBet = players[i].bet;
+        if(tempBet > maxBet) maxBet = tempBet;
+      }
+      
+      //adjusts the settings of the number input field
+      document.getElementById("raisePopup").style.display = "block";
+      document.getElementById("raiseInput").setAttribute("min", maxBet);
+      document.getElementById("raiseInput").setAttribute("max", player.balance);
+      document.getElementById("raiseInput").focus();
+      document.getElementById("raiseInput").select();
+    }
+
+    //closes the popUpMenu for a raise
+    function closeRaiseMenu() {
+      let val = Number(document.getElementById("raiseInput").value);
+
+      console.log(val);
+
+      //adjusts player's palance
+      let player = players[0];
+      player.balance-=val;
+      player.infor+=val;
+      player.bet+=val;
+
+      //removes popup
+      document.getElementById("raisePopup").style.display = "none";
+
+      //cycles to next player
+      cycle();
+    }
+
+    //call largest previous bet
+    function call() {
+      let player = players[0];
+
+      //finds the max bet so far
+      let maxBet = 0;
+
+      for(let i = 1; i<players.length; i++) {
+        let tempBet = players[i].bet;
+        if(tempBet > maxBet) maxBet = tempBet;
+      }
+
+      //adjusts balance
+      let more = maxBet-player.bet;
+      player.balance-=more;
+      player.infor+=more;
+      player.bet+=more;
+      
+      //cycle to next player
+      cycle();
+    }
+
+    //folds current player
+    function fold() {
+      let player = players[0];
+
+      player.folded = true;
+
+      //checks if all players are folded
+      let allFolded = true;
+      for(let i = 0; i<totalPlayers; i++) {
+        if(!players[i].folded) {
+          allFolded = false;
+          break;
+        }
+        
+      }
+
+      //if not all folded cycle
+      if(!allFolded) cycle();
+
+      //if all folded open the next hand menu but in reality this should never happen so it should just fucking break
+      else {
+        // console.log("all folded");
+        openNextHandMenu();
+      }
+    }
+
+    //moves on to the next round of play
+    function nextRound() {
+      console.log("next round");
+
+      //resets bets and visited
+      for(let i = 0; i<totalPlayers; i++) {
+        players[i].bet = 0;
+        players[i].visited = false;
+      }
+
+      //finds lowest non-folded player
+      let lowestNotFolded = Number.MAX_SAFE_INTEGER;
+      for(let i = 0; i<totalPlayers; i++) {
+        if(!players[i].folded) {
+          let tempId = players[i].id;
+          if(tempId < lowestNotFolded) lowestNotFolded = tempId;
+        }
+      }
+
+      //cycles to lowest non-folded player
+      let id = players[0].id;
+      while(id!=lowestNotFolded) {
+        let first = players.shift();
+        players.push(first);
+        id=players[0].id;
+      }
+    }
+
+    //generates the winner options for the next hand menu
+    function generateWinnerOptions() {
+      let winnerInput = document.getElementById("nextHandWinnerInput");
+
+      for(let i = 0; i<totalPlayers; i++) {
+        let option = document.createElement("option");
+        option.innerHTML = players[i].name;
+        option.value = players[i].name;
+
+        winnerInput.appendChild(option);
+      } 
+    }
+
+    generateWinnerOptions();
+
+    //opens next hand menu
+    function openNextHandMenu() {
+      let winnerInput = document.getElementById("nextHandWinnerInput");
+      let popup = document.getElementById("nextHandPopup");
+
+      setOpenMenu(popup);
+
+      popup.style.display = "block";
+
+      winnerInput.focus();
+    }
+
+    //closes next hand menu
+    function closeNextHandMenu() {
+      let winner = document.getElementById("nextHandWinnerInput").value;
+
+      console.log(winner);
+
+      //finds index of the winner
+      let winnerIndex;
+      for(let i = 0; i<totalPlayers; i++) {
+        if(players[i].name == winner) winnerIndex = i;
+      }
+
+      //gives winning player the pot
+      //TODO THIS IS WHERE LOGIC FOR WERID ALL IN BEFORE MORE BETTING EDGE CASE SHOULD GO
+      let winningPlayer = players[winnerIndex];
+      let pot = 0;
+      for(let i = 0; i<totalPlayers; i++) {
+        pot+=players[i].infor;
+        players[i].infor = 0;
+        players[i].folded = false;
+      }
+      winningPlayer.balance+=pot;
+
+      //remove popup
+      document.getElementById("nextHandPopup").style.display = "none";
+
+      //go back to first player
+      while(players[0].id != 0) {
+        let first = players.shift();
+        players.push(first);
+      }
+
+      //redraw everything
+      clear();
+      drawActivePlayer();
+      drawNonActivePlayers();
+
+    }
+
+    //opens player menu
+    function openPlayerMenu() {
+
+      // let winnerInput = document.getElementById("nextHandWinnerInput");
+      let popup = document.getElementById("playerMenuPopup");
+      setOpenMenu(popup);
+
+      popup.style.display = "block";
+
+      let playerNumberInput = document.getElementById("playerNumberInput");
+
+      //adjusts the settings of the number input field
+      playerNumberInput.setAttribute("min", 0);
+      playerNumberInput.value = totalPlayers;
+
+      let form = document.getElementById("playerMenuForm");
+
+      //event listener for number of players selector changing
+      playerNumberInput.addEventListener('input', ()=> {
+        
+        let difference = playerNumberInput.value-(form.childElementCount-4)/2;
+
+        //if number increased
+        if(difference > 0) {
+          let b = form.removeChild(form.lastChild);
+          let p = form.removeChild(form.lastChild);
+
+          let label = document.createElement("label");
+          label.innerHTML = "Player " + (playerNumberInput.value) + "'s name: ";
+
+          let textField = document.createElement("input");
+          textField.className = "w3-input w3-border";
+          textField.setAttribute("type", "text");
+          textField.value = "Player " + (playerNumberInput.value);
+
+          form.appendChild(label);
+          form.appendChild(textField);
+
+          form.appendChild(p);
+          form.appendChild(b);
+        }
+
+        //if number decreased
+        else if(difference < 0) {
+          let b = form.removeChild(form.lastChild);
+          let p = form.removeChild(form.lastChild);
+          form.removeChild(form.lastChild);
+          form.removeChild(form.lastChild);
+
+          form.appendChild(p);
+          form.appendChild(b);
+        }
+      });
+
+      //remove children except text field and label
+      while(form.childElementCount!=2) {
+        form.removeChild(form.lastChild);
+      }
+
+      //generate player boxes
+      for(let i = 0; i<totalPlayers; i++) {
+        let label = document.createElement("label");
+        label.innerHTML = "Player " + (i+1) + "'s name: ";
+
+        let textField = document.createElement("input");
+        textField.className = "w3-input w3-border";
+        textField.setAttribute("type", "text");
+        textField.value = playersInOrder[i].name;
+
+        form.appendChild(label);
+        form.appendChild(textField);
+      } 
+
+      //generate button and spacing
+      let p = document.createElement("p");
+      p.style.height = "40px";
+      form.appendChild(p);
+
+      let b = document.createElement("button");
+      b.id = "closePlayerMenuPopup";
+      b.className = "w3-round w3-display-bottommiddle w3-margin-bottom w3-container w3-button w3-green";
+      b.innerHTML = "Confirm Changes";
+      form.appendChild(b);
+
+    }
+
+    //closes the player menu
+    function closePlayerMenu() {
+
+      let form = document.getElementById("playerMenuForm");
+      let playerNumberInput = document.getElementById("playerNumberInput");
+     
+      let difference = playerNumberInput.value - totalPlayers;
+      totalPlayers = playerNumberInput.value;
+
+      //if number of players increased
+      if(difference > 0) {
+        for(let i = 0; i<difference; i++) {
+          let newPlayer = new Player(name, 500 /*TODO INSERT STARTING BALANCE*/, i);
+          players.push(newPlayer);
+          playersInOrder.push(newPlayer);
+        }
+      }
+
+      //if number of players decreased
+      else if(difference < 0) {
+        for(let i = 0; i<difference*-1; i++) {
+          let toRemove = playersInOrder.pop();
+          let removeIndex = players.indexOf(toRemove);
+          players.splice(removeIndex, 1);
+        }
+      }
+
+      //rename each player
+      for(let i = 0; i<totalPlayers; i++) {
+        playersInOrder[i].name = form.children[3+2*i].value;
+      }
+
+      document.getElementById("playerMenuPopup").style.display = "none";
+
+      //redraw everything
+      clear();
+      drawActivePlayer();
+      drawNonActivePlayers();
+    }
+
+    //opens the cheat sheet
+    function openCheatSheet() {
+      document.getElementById("cheatSheetPopup").style.display = "block";
+      setOpenMenu(document.getElementById("cheatSheetPopup"));
+    }
+
+    //opens shortcuts menu
+    function openShortcutsMenu() {
+      document.getElementById("shortcutsPopup").style.display = "block";
+      setOpenMenu(document.getElementById("shortcutsPopup"));
+    }
+
+    //stores currently open menu
+    let openMenu;
+
+    //changes currently open element
+    function setOpenMenu(element) {
+      openMenu = element;
+    }
+
+    //adds keydown event listeners
+    document.addEventListener("keydown", (e) => {
+      let key = e.key;
+
+
+      if(key=="c") call();
+      else if(key == "r") openRaiseMenu();
+      else if(key== "f") fold();
+      else if(key == "n") nextRound();
+      else if(key == "h") openNextHandMenu();
+      else if(key == "p") openPlayerMenu();
+      else if(key == "x") openCheatSheet();
+      else if(key =="/") openShortcutsMenu();
+
+      else if(key == "Escape") {
+        openMenu.style.display = "none";
+      }
+    });
+
+  </script>
+</html>
