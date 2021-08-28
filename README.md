@@ -6,5 +6,7 @@ Use when you want to play poker and have cards but no chips - can handle as many
 
 ## Future Features
 -Ability to manually set player balances
+
 -Ability to choose a blind or an ante system
+
 -Ability to choose a starting balance
